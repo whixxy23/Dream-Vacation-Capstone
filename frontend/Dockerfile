@@ -1,3 +1,4 @@
+# --- Build stage: compile the React app to static assets ---
 FROM node:16-alpine AS builder
 
 WORKDIR /app
