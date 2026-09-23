@@ -29,13 +29,13 @@ services:
         condition: service_healthy
     environment:
       PORT: ${BACKEND_PORT}
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_USER: ${POSTGRES_USER}
-      DB_PASSWORD: ${POSTGRES_PASSWORD}
-      DB_NAME: ${POSTGRES_DB}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      DATABASE_URL: ${DATABASE_URL}
+      COUNTRIES_API_BASE_URL: ${COUNTRIES_API_BASE_URL}
     ports:
-      - "${BACKEND_PORT}:5000"
+      - "${BACKEND_PORT}:3001"
     networks:
       - dream-vacations-net
 
