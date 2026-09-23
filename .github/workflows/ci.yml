@@ -1,12 +1,14 @@
 name: CI
 
-# Runs on every pull request and on pushes to dev, so problems are caught
-# before they reach main.
+# Matches the branching model in Contributing.md: all work lands on
+# `develop` first, then flows through `staging` before `main`. CI runs on
+# every PR into any of those three, plus every push to `develop` so it
+# stays green as a base for new feature branches.
 on:
   pull_request:
-    branches: [main, dev]
+    branches: [main, staging, develop]
   push:
-    branches: [dev]
+    branches: [develop]
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
@@ -46,14 +48,13 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Lint
+        run: npm run lint
+
       - name: Run tests
         run: npm test
         env:
-          DB_HOST: localhost
-          DB_PORT: 5432
-          DB_USER: postgres
-          DB_PASSWORD: postgres
-          DB_NAME: dream_vacations_test
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/dream_vacations_test
 
       - name: Build backend Docker image (no push)
         uses: docker/build-push-action@v6
@@ -81,8 +82,13 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Lint
+        run: npm run lint
+
       - name: Run tests
         run: npm test
+        env:
+          CI: true
 
       - name: Build production bundle
         run: npm run build
