@@ -6,9 +6,9 @@ name: CI
 # stays green as a base for new feature branches.
 on:
   pull_request:
-    branches: [main, staging, develop]
+    branches: [main, staging, dev]
   push:
-    branches: [develop]
+    branches: [dev, staging, main]
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
