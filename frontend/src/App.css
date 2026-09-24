@@ -1,0 +1,150 @@
+.page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 24px 64px;
+}
+
+.hero {
+  padding: 88px 0 48px;
+  border-bottom: 1px solid #e4e4e0;
+}
+
+.eyebrow {
+  color: #0f4c5c;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin: 0 0 12px;
+}
+
+.hero h1 {
+  font-size: clamp(1.9rem, 4.5vw, 3rem);
+  line-height: 1.15;
+  margin: 0 0 16px;
+  max-width: 16ch;
+}
+
+.subhead {
+  font-size: 1.05rem;
+  color: #4b4b46;
+  max-width: 46ch;
+}
+
+.content {
+  padding-top: 40px;
+}
+
+.add-form {
+  display: flex;
+  gap: 12px;
+  max-width: 480px;
+}
+
+.add-form input {
+  flex: 1;
+  padding: 12px 14px;
+  border: 1px solid #d5d5d0;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.add-form input:focus {
+  outline: none;
+  border-color: #0f4c5c;
+  box-shadow: 0 0 0 3px rgba(15, 76, 92, 0.15);
+}
+
+.add-form button {
+  padding: 12px 20px;
+  background: #0f4c5c;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.add-form button:hover:not(:disabled) {
+  background: #0c3c48;
+}
+
+.add-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form-error {
+  color: #a3372e;
+  margin: 12px 0 0;
+  font-size: 0.9rem;
+}
+
+.status {
+  padding: 40px 0;
+  color: #4b4b46;
+}
+
+.status--error {
+  color: #a3372e;
+}
+
+.grid {
+  list-style: none;
+  margin: 32px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  border: 1px solid #e4e4e0;
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card h2 {
+  font-size: 1.2rem;
+  margin: 0 0 12px;
+}
+
+.card dl {
+  margin: 0 0 16px;
+  flex: 1;
+}
+
+.card dl div {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 0.92rem;
+  border-bottom: 1px solid #f0f0ec;
+}
+
+.card dt {
+  color: #6b6b64;
+  font-weight: 500;
+}
+
+.card dd {
+  margin: 0;
+  font-weight: 600;
+  text-align: right;
+}
+
+.card .remove {
+  padding: 8px 14px;
+  background: transparent;
+  color: #a3372e;
+  border: 1px solid #e4c4c0;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.card .remove:hover {
+  background: #fdf2f1;
+}

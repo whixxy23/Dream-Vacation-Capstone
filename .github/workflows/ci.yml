@@ -1,0 +1,101 @@
+name: CI
+
+# Matches the branching model in Contributing.md: all work lands on
+# `develop` first, then flows through `staging` before `main`. CI runs on
+# every PR into any of those three, plus every push to `develop` so it
+# stays green as a base for new feature branches.
+on:
+  pull_request:
+    branches: [main, staging, dev]
+  push:
+    branches: [dev, staging, main]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: Backend - lint, test, build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: dream_vacations_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/dream_vacations_test
+
+      - name: Build backend Docker image (no push)
+        uses: docker/build-push-action@v6
+        with:
+          context: backend
+          push: false
+          tags: dream-vacations-backend:ci
+
+  frontend:
+    name: Frontend - lint, test, build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test
+        env:
+          CI: true
+
+      - name: Build production bundle
+        run: npm run build
+
+      - name: Build frontend Docker image (no push)
+        uses: docker/build-push-action@v6
+        with:
+          context: frontend
+          push: false
+          tags: dream-vacations-frontend:ci
