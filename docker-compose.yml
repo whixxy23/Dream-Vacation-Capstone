@@ -34,6 +34,7 @@ services:
       DB_NAME: ${DB_NAME}
       DATABASE_URL: ${DATABASE_URL}
       COUNTRIES_API_BASE_URL: ${COUNTRIES_API_BASE_URL}
+      COUNTRIES_API_KEY: ${COUNTRIES_API_KEY}
     ports:
       - "${BACKEND_PORT}:3001"
     networks:
@@ -43,7 +44,7 @@ services:
     build:
       context: ./frontend
       args:
-        REACT_APP_API_BASE_URL: ${REACT_APP_API_BASE_URL}
+        REACT_APP_API_URL: ${REACT_APP_API_URL}
     container_name: dream-vacations-frontend
     restart: unless-stopped
     depends_on:

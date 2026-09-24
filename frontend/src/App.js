@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+const API_URL = process.env.REACT_APP_API_URL || '/api';
 
 function App() {
   const [destinations, setDestinations] = useState([]);
@@ -17,7 +17,7 @@ function App() {
 
   const fetchDestinations = async () => {
     try {
-      const response = await axios.get(`${API_URL}/api/destinations`);
+      const response = await axios.get(`${API_URL}/destinations`);
       setDestinations(response.data);
       setStatus('ready');
     } catch (error) {
@@ -33,7 +33,7 @@ function App() {
     setSubmitting(true);
     setFormError('');
     try {
-      await axios.post(`${API_URL}/api/destinations`, { country });
+      await axios.post(`${API_URL}/destinations`, { country });
       setCountry('');
       await fetchDestinations();
     } catch (error) {
@@ -47,7 +47,7 @@ function App() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`${API_URL}/api/destinations/${id}`);
+      await axios.delete(`${API_URL}/destinations/${id}`);
       fetchDestinations();
     } catch (error) {
       console.error('Error deleting destination:', error);

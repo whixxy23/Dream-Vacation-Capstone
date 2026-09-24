@@ -11,7 +11,11 @@ const port = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-const COUNTRIES_API_BASE_URL = process.env.COUNTRIES_API_BASE_URL || 'https://restcountries.com/v3.1';
+const COUNTRIES_API_BASE_URL =
+  process.env.COUNTRIES_API_BASE_URL ||
+  'https://api.restcountries.com/countries/v5';
+
+const COUNTRIES_API_KEY = process.env.COUNTRIES_API_KEY;
 
 // Used by Docker healthchecks, CI smoke tests, and load balancer probes.
 app.get('/api/health', async (_req, res) => {
@@ -41,8 +45,12 @@ app.post('/api/destinations', async (req, res) => {
   }
 
   try {
-    const response = await axios.get(`${COUNTRIES_API_BASE_URL}/name/${encodeURIComponent(country)}`);
-    const countryInfo = response.data[0];
+    const response = await axios.get(`${COUNTRIES_API_BASE_URL}/names.common/${encodeURIComponent(country)}`, {
+      params: {
+        'api-key': COUNTRIES_API_KEY
+      }
+    });
+    const countryInfo = response.data.data?.objects?.[0];
 
     if (!countryInfo) {
       return res.status(404).json({ error: `No country found matching "${country}"` });
@@ -51,8 +59,8 @@ app.post('/api/destinations', async (req, res) => {
     const result = await pool.query(
       'INSERT INTO destinations (country, capital, population, region) VALUES ($1, $2, $3, $4) RETURNING *',
       [
-        countryInfo.name?.common || country,
-        countryInfo.capital ? countryInfo.capital[0] : null,
+        countryInfo.names?.common || country,
+        countryInfo.capitals?.[0]?.name || null,
         countryInfo.population ?? null,
         countryInfo.region ?? null,
       ],
