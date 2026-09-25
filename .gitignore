@@ -1,6 +1,33 @@
-#Environmental Variables
+# Environment variables
 .env
 *.env
+!.env.example
+!backend/.env.example
+!frontend/.env.example
 
-#Dependencies
+# Dependencies
 node_modules/
+
+# Build output
+frontend/build/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Terraform
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/terraform.tfvars
+terraform/*.pem
+terraform/crash.log
+
+# OS / editor cruft
+.DS_Store
+.vscode/
+.idea/
+
+# Test coverage
+coverage/
