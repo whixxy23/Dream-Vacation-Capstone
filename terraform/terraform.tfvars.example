@@ -10,6 +10,6 @@ public_subnet_cidrs  = ["10.20.1.0/24", "10.20.2.0/24"]
 
 instance_type   = "t3.micro"
 key_pair_name   = "dream-vacations-key" # must already exist in this AWS account/region
-ssh_allowed_cidr = "203.0.113.10/32"    # replace with your own IP in production
+ssh_allowed_cidr = "0.0.0.0/0"    # replace with your own IP in production
 
 domain_name = "" # e.g. "dreamvacations.example.com" - leave blank to skip Route 53
