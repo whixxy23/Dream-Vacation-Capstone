@@ -22,6 +22,7 @@ services:
   backend:
     build:
       context: ./backend
+    image: ${BACKEND_IMAGE:-dream-vacations-backend:local}
     container_name: dream-vacations-backend
     restart: unless-stopped
     depends_on:
@@ -45,6 +46,7 @@ services:
       context: ./frontend
       args:
         REACT_APP_API_URL: ${REACT_APP_API_URL}
+    image: ${FRONTEND_IMAGE:-dream-vacations-frontend:local}
     container_name: dream-vacations-frontend
     restart: unless-stopped
     depends_on:
