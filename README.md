@@ -1,11 +1,8 @@
 # Dream Vacation Destinations
 
-[![CI](https://github.com/OWNER/REPO/actions/workflows/ci.yml/badge.svg)](https://github.com/OWNER/REPO/actions/workflows/ci.yml)
-[![CD](https://github.com/OWNER/REPO/actions/workflows/cd.yml/badge.svg)](https://github.com/OWNER/REPO/actions/workflows/cd.yml)
+[![CI](https://github.com/whixxy23/Dream-Vacation-Capstone/actions/workflows/ci.yml/badge.svg)](https://github.com/OWNER/REPO/actions/workflows/ci.yml)
+[![CD](https://github.com/whixxy23/Dream-Vacation-Capstone/actions/workflows/cd.yml/badge.svg)](https://github.com/OWNER/REPO/actions/workflows/cd.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-
-> Replace `OWNER/REPO` above with your actual GitHub `owner/repo` once
-> pushed, so the badges render.
 
 Lets users build a wishlist of countries they'd like to visit. Add a country
 name and the app looks it up via the REST Countries API, storing its
