@@ -84,13 +84,29 @@ jobs:
       # by build-and-push above; this job's job is to sync config and
       # restart, not to fetch source. This step also creates the target
       # directory on first run if it doesn't exist yet.
+      # Secrets live in GitHub (ENV_FILE), not on your laptop or in git. This
+      # writes them to a .env on the runner, which the next step ships to the
+      # server alongside docker-compose.yml. Image names are derived here (and
+      # lowercased - GHCR requires it) so they always match what
+      # build-and-push just published.
+      - name: Generate .env from secrets
+        env:
+          ENV_FILE: ${{ secrets.ENV_FILE }}
+        run: |
+          REPO_LC="${GITHUB_REPOSITORY,,}"
+          printf '%s\n' "$ENV_FILE" > .env
+          {
+            echo "BACKEND_IMAGE=ghcr.io/${REPO_LC}-backend:latest"
+            echo "FRONTEND_IMAGE=ghcr.io/${REPO_LC}-frontend:latest"
+          } >> .env
+
       - name: Copy deployment files to EC2
         uses: appleboy/scp-action@v1.0.0
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_SSH_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "docker-compose.yml,nginx/**,scripts/**"
+          source: "docker-compose.yml,.env,nginx/**,scripts/**"
           target: "/home/${{ secrets.EC2_SSH_USER }}/dream-vacations"
 
       - name: Pull latest images and restart containers
@@ -102,7 +118,8 @@ jobs:
           script: |
             set -euo pipefail
             cd /home/${{ secrets.EC2_SSH_USER }}/dream-vacations
-            test -f .env || { echo "Missing .env on server - see docs/deployment-guide.md"; exit 1; }
+            test -f .env || { echo "Missing .env on server - is the ENV_FILE secret set?"; exit 1; }
+            chmod 600 .env
             echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
             docker compose pull
             docker compose up -d
