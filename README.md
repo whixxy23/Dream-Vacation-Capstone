@@ -1,7 +1,7 @@
 # Dream Vacation Destinations
 
-[![CI](https://github.com/whixxy23/Dream-Vacation-Capstone/actions/workflows/ci.yml/badge.svg)](https://github.com/OWNER/REPO/actions/workflows/ci.yml)
-[![CD](https://github.com/whixxy23/Dream-Vacation-Capstone/actions/workflows/cd.yml/badge.svg)](https://github.com/OWNER/REPO/actions/workflows/cd.yml)
+[![CI](https://github.com/whixxy23/Dream-Vacation-Capstone/actions/workflows/ci.yml/badge.svg)](https://github.com/whixxy23/Dream-Vacation-Capstone/actions/workflows/ci.yml)
+[![CD](https://github.com/whixxy23/Dream-Vacation-Capstone/actions/workflows/cd.yml/badge.svg)](https://github.com/whixxy23/Dream-Vacation-Capstone/actions/workflows/cd.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 Lets users build a wishlist of countries they'd like to visit. Add a country
