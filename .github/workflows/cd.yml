@@ -78,15 +78,31 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Deploy over SSH
+      # The server never needs git, and never builds anything itself - it
+      # only needs docker-compose.yml (to know which images/ports to use)
+      # plus the nginx/scripts config. Images are already built and pushed
+      # by build-and-push above; this job's job is to sync config and
+      # restart, not to fetch source. This step also creates the target
+      # directory on first run if it doesn't exist yet.
+      - name: Copy deployment files to EC2
+        uses: appleboy/scp-action@v1.0.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_SSH_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "docker-compose.yml,nginx/**,scripts/**"
+          target: "/home/${{ secrets.EC2_SSH_USER }}/dream-vacations"
+
+      - name: Pull latest images and restart containers
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_SSH_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            set -euo pipefail
             cd /home/${{ secrets.EC2_SSH_USER }}/dream-vacations
-            git pull origin main
+            test -f .env || { echo "Missing .env on server - see docs/deployment-guide.md"; exit 1; }
             echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
             docker compose pull
             docker compose up -d
